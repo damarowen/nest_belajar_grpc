@@ -1,9 +1,26 @@
-import { Controller, Logger, Post, Body, OnModuleInit } from '@nestjs/common';
-import { IGrpcService } from './grpc.interface';
+import {
+  Controller,
+  Logger,
+  Post,
+  Body,
+  OnModuleInit,
+  Get,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { Client, ClientGrpc } from '@nestjs/microservices';
 import { microserviceOptions } from './grpc.option';
+import { Observable } from 'rxjs';
 
-@Controller()
+interface IGrpcService {
+  accumulate(numberArray: INumberArray): Observable<any>;
+  getSingleUser(IdUser: number): Observable<any>;
+}
+interface INumberArray {
+  data: number[];
+}
+
+@Controller('api/v1')
 export class AppController implements OnModuleInit {
   private logger = new Logger('AppController');
 
@@ -20,5 +37,11 @@ export class AppController implements OnModuleInit {
   async accumulate(@Body('data') data: number[]) {
     this.logger.log('Adding ' + data.toString());
     return this.grpcService.accumulate({ data }); // <-- to this
+  }
+
+  @Post('/:id')
+  getSingleUser(@Body('IdUser') IdUser: number) {
+    console.log(IdUser, 'AA');
+    return this.grpcService.getSingleUser(100);
   }
 }
