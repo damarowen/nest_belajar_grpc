@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
-import { Transport } from '@nestjs/microservices';
+import { ClientOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path'; // <-- Add this
 
 const logger = new Logger('Main');
-const microserviceOptions = {
+export const microserviceOptions: ClientOptions = {
   transport: Transport.GRPC,
   options: {
     package: 'app',
