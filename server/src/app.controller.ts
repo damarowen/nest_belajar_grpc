@@ -10,9 +10,11 @@ interface INumberArray {
 interface ISumOfNumberArray {
   sum: number;
 }
-interface IUser {
-  data: number;
+
+interface IdUser {
+  id: number;
 }
+
 interface IUserData {
   name: string;
   id: number;
@@ -32,14 +34,14 @@ export class AppController {
   }
 
   @GrpcMethod('AppController', 'getSingleUser')
-  getSingleUser(IdUser: number, meta: any): IUserData {
-    console.log(meta);
-    console.log(JSON.stringify(IdUser), 'zzz');
-    const u = {
-      name: 'damar',
-      id: IdUser,
-      email: 'asu',
-    };
-    return u;
+  getSingleUser(IdUser: IdUser): IUserData {
+
+    const dataUser = [
+      { id: 1, name: 'John' , email : "email"},
+      { id: 2, name: 'Doe', email :"email" },
+    ];
+    const u = dataUser.find(({ id }) => id == IdUser.id);
+    if(u) return u 
+    return { id: 0, name: '', email :"" }
   }
 }

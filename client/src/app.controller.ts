@@ -12,13 +12,25 @@ import { Client, ClientGrpc } from '@nestjs/microservices';
 import { microserviceOptions } from './grpc.option';
 import { Observable } from 'rxjs';
 
-interface IGrpcService {
-  accumulate(numberArray: INumberArray): Observable<any>;
-  getSingleUser(IdUser: number): Observable<any>;
+interface IdUser {
+  id: number;
 }
+
+interface IUserData {
+  name: string;
+  id: number;
+  email: string;
+}
+
 interface INumberArray {
   data: number[];
 }
+
+interface IGrpcService {
+  accumulate(request: INumberArray): Observable<any>;
+  getSingleUser(request: IdUser): Promise<IUserData>;
+}
+
 
 @Controller('api/v1')
 export class AppController implements OnModuleInit {
@@ -26,7 +38,6 @@ export class AppController implements OnModuleInit {
 
   @Client(microserviceOptions)
   private client: ClientGrpc;
-
   private grpcService: IGrpcService;
 
   onModuleInit() {
@@ -39,9 +50,10 @@ export class AppController implements OnModuleInit {
     return this.grpcService.accumulate({ data }); // <-- to this
   }
 
-  @Post('/:id')
-  getSingleUser(@Body('IdUser') IdUser: number) {
-    console.log(IdUser, 'AA');
-    return this.grpcService.getSingleUser(100);
+  @Get('/:id')
+  async getSingleUser(@Param('id') id: number) {
+    const rs =  await this.grpcService.getSingleUser({id});
+    console.log(rs, "AA")
+    return rs
   }
 }

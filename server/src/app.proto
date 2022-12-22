@@ -21,7 +21,7 @@ message SumOfNumberArray {
 
 
 message IdUser {
-  int32 IdUser = 1;
+  int32 id = 1;
 }
 
 message UserData {
