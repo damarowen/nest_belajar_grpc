@@ -25,12 +25,14 @@ interface IUserData {
 interface INumberArray {
   data: number[];
 }
-
-interface IGrpcService {
-  accumulate(request: INumberArray): Observable<any>;
-  getSingleUser(request: IdUser): Promise<IUserData>;
+interface ISumOfNumberArray {
+  sum: number;
 }
 
+interface IGrpcService {
+  accumulate(request: INumberArray): Promise<ISumOfNumberArray>;
+  getSingleUser(request: IdUser): Promise<IUserData>;
+}
 
 @Controller('api/v1')
 export class AppController implements OnModuleInit {
@@ -52,8 +54,8 @@ export class AppController implements OnModuleInit {
 
   @Get('/:id')
   async getSingleUser(@Param('id') id: number) {
-    const rs =  await this.grpcService.getSingleUser({id});
-    console.log(rs, "AA")
-    return rs
+    const rs = await this.grpcService.getSingleUser({ id });
+    console.log(rs, 'AA');
+    return rs;
   }
 }

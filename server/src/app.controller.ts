@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Controller, Logger } from '@nestjs/common';
 import { MathService } from './math.service';
 import { GrpcMethod } from '@nestjs/microservices';
@@ -35,13 +34,12 @@ export class AppController {
 
   @GrpcMethod('AppController', 'getSingleUser')
   getSingleUser(IdUser: IdUser): IUserData {
-
     const dataUser = [
-      { id: 1, name: 'John' , email : "email"},
-      { id: 2, name: 'Doe', email :"email" },
+      { id: 1, name: 'John', email: 'email' },
+      { id: 2, name: 'Doe', email: 'email' },
     ];
     const u = dataUser.find(({ id }) => id == IdUser.id);
-    if(u) return u 
-    return { id: 0, name: '', email :"" }
+    if (u) return u;
+    return { id: 0, name: '', email: '' };
   }
 }
