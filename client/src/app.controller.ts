@@ -6,11 +6,9 @@ import {
   OnModuleInit,
   Get,
   Param,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { Client, ClientGrpc } from '@nestjs/microservices';
 import { microserviceOptions } from './grpc.option';
-import { Observable } from 'rxjs';
 
 interface IdUser {
   id: number;
@@ -55,7 +53,7 @@ export class AppController implements OnModuleInit {
   @Get('/:id')
   async getSingleUser(@Param('id') id: number) {
     const rs = await this.grpcService.getSingleUser({ id });
-    console.log(rs, 'AA');
+    console.log(rs, 'from server');
     return rs;
   }
 }

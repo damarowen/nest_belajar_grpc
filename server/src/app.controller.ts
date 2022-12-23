@@ -1,6 +1,6 @@
 import { Controller, Logger } from '@nestjs/common';
 import { MathService } from './math.service';
-import { GrpcMethod } from '@nestjs/microservices';
+import { GrpcMethod, RpcException } from '@nestjs/microservices';
 
 interface INumberArray {
   data: number[];
@@ -34,12 +34,16 @@ export class AppController {
 
   @GrpcMethod('AppController', 'getSingleUser')
   getSingleUser(IdUser: IdUser): IUserData {
-    const dataUser = [
-      { id: 1, name: 'John', email: 'email' },
-      { id: 2, name: 'Doe', email: 'email' },
-    ];
-    const u = dataUser.find(({ id }) => id == IdUser.id);
-    if (u) return u;
-    return { id: 0, name: '', email: '' };
+    try {
+      const dataUser = [
+        { id: 1, name: 'John', email: 'email' },
+        { id: 2, name: 'Doe', email: 'email' },
+      ];
+      const u = dataUser.find(({ id }) => id == IdUser.id);
+      if (!u) throw new Error();
+      return u;
+    } catch (e) {
+      throw new RpcException({ message: 'some error' });
+    }
   }
 }
